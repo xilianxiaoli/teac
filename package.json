@@ -1,0 +1,11 @@
+{
+  "name": "vuetwo",
+  "version": "1.0.0",
+  "description": "A Vue.js project",
+  "author": "xilianxiaoli <546394709@qq.com>",
+  "private": true,
+  "scripts": {
+    "dev": "node build/dev-server.js",
+    "build": "node build/build.js"
+  }
+}

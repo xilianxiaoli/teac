@@ -1,0 +1,336 @@
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: "微软雅黑","Microsoft YaHei","Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #fffaf4;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+
+p {
+  margin: 0;
+}
+
+html,
+body {
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: 100% !important;
+  -moz-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+}
+
+a,
+img {
+  -webkit-touch-callout: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+a,
+button,
+input {
+  outline: none;
+}
+
+input {
+  border: none;
+}
+
+select,
+input[type="button"],
+input[type="submit"] {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.ng-cloak {
+  display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+a,
+img,
+button,
+input,
+textarea,
+div {
+  -webkit-tap-highlight-color: transparent;
+  font-family: "微软雅黑","Microsoft YaHei";
+}
+
+.container {
+  overflow: hidden;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.container {
+  overflow: hidden;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.container {
+  overflow: hidden;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.top-tip {
+  margin: 15px 0;
+}
+.bottom-tip {
+  position: fixed;
+  bottom: 0;
+  margin: 10px 0;
+  text-align: center;
+  width: 100%;
+}
+.openAccount-step2 {
+  display: none;
+}
+/* 输入框组件  */
+.form_box {
+  margin-top: 10px;
+  margin-bottom: 32px;
+  border: none;
+  position: relative;
+}
+.form_box--item {
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #eee;
+  padding: 12px 0;
+  height: 25px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+.form_box--bottom {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.form_box--head {
+  margin-top: 2px;
+  display: block;
+  position: absolute;
+  left: 0;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding-left: 15px;
+  width: 90px;
+}
+.form_box--input {
+  box-sizing: border-box;
+  border: none;
+  padding: 0 0 0 90px;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  line-height: 25px;
+  outline: none;
+}
+.form_box--code {
+  padding: 0 100px 0 90px;
+}
+.form_box--aright {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+.form_box--code_btn {
+  position: absolute;
+  top: 9px;
+  right: 15px;
+  border: 1px solid #ffa5a2;
+  border-radius: 5px;
+  width: 80px;
+  height: 30px;
+  color: #ffa5a2;
+  font-size: 14px;
+  text-align: center;
+  background: none;
+  line-height: 30px;
+}
+.form_box--code_btn_disabled {
+  border: 1px solid #969696;
+  color: #969696;
+}
+.form_box-bottomTip {
+  position: absolute;
+  color: #999;
+  font-size: 12px;
+  bottom: -25px;
+}
+.left_position {
+  left: 15px;
+}
+.right_position {
+  right: 15px;
+}
+.checkboxGroup {
+  display: inline-block;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+}
+#checkboxGroupInput {
+  display: none;
+}
+.check-box {
+  display: block;
+  position: relative;
+  top: 3px;
+  left: 0;
+  border: 2px solid #969696;
+  border-radius: 3px;
+  width: 15px;
+  height: 15px;
+  background-color: #f5f5f5;
+  -webkit-transition: border-color ease .2s;
+  -moz-transition: border-color ease .2s;
+  -o-transition: border-color ease .2s;
+  transition: border-color ease .2s;
+  cursor: pointer;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+input[type=checkbox]:checked + .check-box, .check-box.checked {
+  border-color: #ff5050;
+}
+.check-box::before, .check-box::after {
+  display: block;
+  position: absolute;
+  border-radius: 5px;
+  width: 2px;
+  height: 0;
+  background-color: #ff5050;
+  -webkit-transition: opacity ease .5;
+  -moz-transition: opacity ease .5;
+  transition: opacity ease .5;
+  -webkit-transform-origin: left top;
+  -moz-transform-origin: left top;
+  -ms-transform-origin: left top;
+  -o-transform-origin: left top;
+  transform-origin: left top;
+  content: " ";
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.check-box::before {
+  top: 11px;
+  left: 5px;
+  -moz-transform: rotate(-149deg);
+  -ms-transform: rotate(-149deg);
+  -webkit-transform: rotate(-149deg);
+  transform: rotate(-149deg);
+}
+.check-box::after {
+  top: 6px;
+  left: 1px;
+  -moz-transform: rotate(-30deg);
+  -ms-transform: rotate(-30deg);
+  -webkit-transform: rotate(-30deg);
+  transform: rotate(-30deg);
+}
+input[type=checkbox]:checked + .check-box::before, .check-box.checked::before {
+  height: 11px;
+  -moz-animation: dothatopcheck 0.4s ease 0s forwards;
+  -webkit-animation: dothatopcheck 0.4s ease 0s forwards;
+  animation: dothatopcheck 0.4s ease 0s forwards;
+}
+input[type=checkbox]:checked + .check-box::after, .check-box.checked::after {
+  height: 5px;
+  -moz-animation: dothabottomcheck 0.2s ease 0s forwards;
+  -webkit-animation: dothabottomcheck 0.2s ease 0s forwards;
+  animation: dothabottomcheck 0.2s ease 0s forwards;
+}
+.form_box--radio-regwrap label {
+  font-size: 12px;
+}
+.form_box--radio-regwrap a {
+  font-size: 12px;
+  color: #ff5050;
+  cursor: pointer;
+}
+/* 金额显示组件 */
+.container_head {
+  height: 155px;
+  padding-top: 67px;
+  box-sizing: border-box;
+  text-align: center;
+  color: #333;
+}
+.container_head--title {
+  font-size: 17px;
+}
+.container_head--detail {
+  font-size: 30px;
+}
+/* 按钮组件  */
+.btn-primary {
+  display: block;
+  border: none;
+  font-size: 16px;
+  line-height: 42px;
+  text-align: center;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #ffffff;
+  background: #ff5050;
+  outline: none;
+  margin: 0 auto 15px;
+  padding: 1px 0;
+  width: 100%;
+  text-align: center;
+}
+.btn-primary:disabled {
+  background-color: #ffa5a2;
+}
+.form_box--radio-logwrap a {
+  color: #ff5050;
+  font-size: 13px;
+}
+.withdraw-btn {
+  color: #333;
+  background: #fff;
+  border: 1px solid #E6E3E3;
+}
