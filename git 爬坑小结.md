@@ -109,5 +109,12 @@ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Crese
 小编用过sourcetree，感觉还不错，非常直观，个人不推荐小白入门使用图形化工具，万一不小心点错了，真不知道该如何处理~ （来自一个制帐加手残的小编的温馨提醒）
 
 -----------------------我是分割线--------------------------
+
+### 子模块
+
+### git -help
+`git <command>  <-help | -h >` 可以查看命令的参数和简要介绍
+`git <command> --help` 通过浏览器打开该命令的详细介绍
+
 ### 小编还会持续更新的~
 
