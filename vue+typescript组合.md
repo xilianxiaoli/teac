@@ -152,6 +152,60 @@ allname是计算后的值，name是被监听的值
 ```
 第一个的事件名称为 `add-to-count`,`n`为传过去的参数；第二个事件名为`reset-count`,参数为空
 
+#### 指令和过滤器
+----------小小更新一下---------------
+> 有小伙伴问指令和过滤器在ts下的写法，之前给遗漏了，现在补充一下。
+
+我尝试了下，发现之前在入口文件直接引入指令或者过滤器的方式不管用了，因为用了ts后，组件的作用域跟之前的不一样了，然后我找了官方的issue，截图如下
+
+![vue-issue](./image/vue-ts/vue-issue.png)
+
+在作者在4月11号回复里，承认了这个问题，但具体什么时候将指令和过滤器的声明加上就未知了，不过作者在issue中给出了解决方案。我写个简单的小栗子
+
+一个自定义指令
+```typescript
+// ./directive/index.ts
+export const focus = {
+    // 当被绑定的元素插入到 DOM 中时……
+    inserted: function (el:HTMLElement) {
+        // 聚焦元素
+        el.focus()
+      }
+}
+```
+
+一个过滤器
+```typescript
+// ./filter/index.ts
+export const capitalize = function (value:string) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+}
+```
+
+组件中使用
+
+```typescript
+import { capitalize }from '@/filter/index'
+import { focus } from '@/directive/index'
+@Component({
+    filters:{capitalize},
+    directives:{focus}
+})
+export default class Test extends Vue {}
+```
+
+```html
+<div>
+    <input v-focus v-model="modelData">
+    <div>{{modelData | capitalize}}</div>
+</div>
+```
+
+可看出这是局部引用，全局引用目前还没找到办法，欢迎有解决办法的小伙伴指教~
+
+
 ### vuex与ts的糅合
 因为vuex是个可选的，所以单独列出来。首先需要引用 `vuex-class` 库，该库有如下几个模块
 ```typescript
