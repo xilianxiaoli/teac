@@ -219,6 +219,26 @@ const ParamValidate = (value: any) => {
 }
 ```
 
+``` typescript
+// 统一异常处理
+export function CatchErr(display: string) {
+    return (target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<Function>) => {
+        let method = descriptor.value;
+        descriptor.value = function (ctx, formData) {
+            try {
+                return method.apply(this, arguments).then((res) => {
+                    return res;
+                }, (error: any) => {
+                    throw new Error({ display })
+                });
+            } catch (error) {
+                throw new Error({ display })
+            }
+        }
+    }
+}
+```
+
 使用如下 
 ``` typescript
 class Test {
@@ -228,6 +248,7 @@ class Test {
         username: Joi.string(),
         password: Joi.string(),
     })
+    @CatchErr('userInfo func')
     async userInfo(ctx: any, param: any) {
         await this.sleep(1000)
     }
