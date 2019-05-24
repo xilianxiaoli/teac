@@ -61,6 +61,8 @@ app.listen(3000, () => {
 - `-b/--body BODY` 请求报文体
 还有很多参数，大家可以查看官网文档
 
+这个库目前只能支持一个接口压测，我写了个脚本，可以支持批量压测和生成测试报告，具体代码见文末。
+
 #### report
 下图是对 `/empty` 接口压测 `autocannon -c 100 -d 5 -p 1 http://127.0.0.1:3000/empty` 结果如下
 
@@ -199,6 +201,91 @@ setTimeout(function() {
 `va test leak` 可疑展示出测试的heapsnapshot文件中可疑的内存泄漏点。
 
 这个库的好处是，省的我们一个个去点开查找，这样可以更加便于我们筛选问题啦~
+
+### 批量压力测试及生成报告
+autocannon 只能运行一个接口，要想在测试下一个接口，就得修改代码，比如想批量测试多个接口，就需要来回改代码，操作就比较麻烦，所以我基于 autocannon 写了个脚本，可以逐一压测定义好的接口，同时还可以生成测试报告。
+
+```javascript
+'use strict'
+
+const autocannon = require('autocannon')
+const reporter = require('autocannon-reporter')
+const path = require('path')
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * @description
+ * 运行autocannon
+ * @author lizc
+ * @param {*} param
+ */
+function makeAutocannon(param) {
+    autocannon(param).on('done', handleResults)
+}
+
+/**
+ * @description
+ * 处理接口
+ * @author lizc
+ * @param {*} result
+ */
+function handleResults(result) {
+    const reportOutputPath = path.join(`./${result.title}_report.html`)
+    reporter.writeReport(reporter.buildReport(result), reportOutputPath, (err, res) => {
+        if (err) console.err('Error writting report: ', err)
+        else console.log('Report written to: ', reportOutputPath)
+    })
+}
+
+// 请求参数
+const autocannonParam = {
+    url: 'http://127.0.0.1:6100/',
+    connections: 100,
+    duration: 10,
+    headers: {
+        type: 'application/x-www-form-urlencoded'
+    }
+}
+// 请求报文参数
+const requestsParam = {
+    method: 'POST', // this should be a put for modifying secret details
+    headers: { // let submit some json?
+        'Content-type': 'application/json; charset=utf-8'
+    }
+}
+
+/**
+ * @description
+ * 启动批量压测
+ * @author lizc
+ * @param {*} methodList 接口列表
+ */
+async function run(methodList) {
+    const autocannonList = methodList.map(val => {
+        return {
+            ...autocannonParam,
+            url: autocannonParam.url + val,
+            title: val,
+            requests: [
+                {
+                    ...requestsParam,
+                }
+            ],
+        }
+    })
+    for (let i = 0; i < autocannonList.length; i++) {
+        if (i !== 0) {
+            await sleep((autocannonList[i - 1].duration + 2) * 1000)
+            makeAutocannon(autocannonList[i])
+        } else {
+            makeAutocannon(autocannonList[i])
+        }
+    }
+}
+// 启动
+run(['order', 'crypto'])
+```
+
 
 ### 小结
 > 我是github的搬运工
