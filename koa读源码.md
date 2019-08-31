@@ -81,20 +81,7 @@ use(fn) {
 
 1. 使用 http.createServer 创建 http.Server ，注册 RequestListener 监听函数，当有请求进来时就会触发监听函数，监听函数有两个参数，分别是 req：请求体  res：返回体
 
-2. 创建当前请求的上下文
-基于 this.content 创建上下文对象，并将原始的 req res 和封装后的 request response 挂载到上下文对象中
-
-```javascript
-const context = Object.create(this.context);
-const request = context.request = Object.create(this.request);
-const response = context.response = Object.create(this.response);
-context.app = request.app = response.app = this;
-context.req = request.req = response.req = req;
-context.res = request.res = response.res = res;
-```
-req 和 res 是httpServer 中原生的对象，request response 基于 req 、res 做了二次封装，提供更多的工具类
-
-3. 构建洋葱模型
+2. 构建洋葱模型
 使用组合 (compose) 将 middleware 数组中存储的中间件函数串联起来，核心实现如下
 
 ```javascript
@@ -122,14 +109,24 @@ return function(context, next) {
 还有一点就是将上下文对象 context 也一并传递下去，保证了各个中间件中的上下文的一致
 
 
-
-
 ### 请求过程
-当有请求进来时，会立即触发 RequestListener 监听函数
+请求进来，会触发 RequestListener 监听函数
 
-1. 基于已经初始化的 content 创建上下文
-2. 把 req 和 res 赋值给上下文对象中；把当前容器 this 赋值给上下文中的 content.app = this
-3. 
+1. 创建当前请求的上下文
+基于 this.content 创建上下文对象，并将原始的 req res 和封装后的 request response 挂载到上下文对象中
+
+```javascript
+const context = Object.create(this.context);
+const request = context.request = Object.create(this.request);
+const response = context.response = Object.create(this.response);
+context.app = request.app = response.app = this;
+context.req = request.req = response.req = req;
+context.res = request.res = response.res = res;
+```
+req 和 res 是httpServer 中原生的对象，request response 基于 req 、res 做了二次封装，提供更多的工具类
+
+2. 执行中间件方法
+
 
 ### cookies
 对 cookies 库做了简单的封装， ctx.cookies 获取的就是 new Cookies() 的对象
