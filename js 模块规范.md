@@ -6,12 +6,12 @@
 而在浏览器上，js 脚本是异步载入的，脚本按照编码顺序依次执行，依赖关系只能按照编码顺序来控制。因此前端早早就有了模块化技术，可每天醒来前端就多一个名词多一个框架的，发展实在迅猛，就前端模块化这些年的积累就有好几种，我们依次来看看。
 
 ### commonjs
-先看伴随 nodejs 而诞生的 commonjs 规范。
-commonjs 规范应用于 node 应用中，在 node 应用中每个文件就是一个模块，拥有自己的作用域，文件中的变量、函数都是私有的，与其他文件相隔离。
+先看伴随 `nodejs` 而诞生的 `commonjs` 规范。
+commonjs 规范应用于 nodejs 应用中，在 nodejs 应用中每个文件就是一个模块，拥有自己的作用域，文件中的变量、函数都是私有的，与其他文件相隔离。
 
-CommonJS规范规定，每个模块内部， module 变量代表当前模块。这个变量是一个对象，它的 exports 属性（即 module.exports ）是对外的接口。加载某个模块，其实是加载该模块的 module.exports 属性。（引用阮一峰老师的描述）
+CommonJS规范规定，每个模块内部， `module` 变量代表当前模块。这个变量是一个对象，它的 `exports` 属性（即 module.exports ）是对外的接口。加载某个模块，其实是加载该模块的 module.exports 属性。（引用阮一峰老师的描述）
 
-举个栗子看看模块化的文件该这么写
+举个栗子看看模块化后的文件该怎么写
 
 ```JavaScript
 // util\index.js
@@ -33,7 +33,7 @@ console.log(module)
 var { name, fun } = require('./util/index.js')
 
 ```
-上面这个文件有两个变量，一个函数，通过 module.exports 暴露变量 name 和函数 fun ,age 这个变量就是私有的，外部无法直接访问，如果想让 age 变量全局都可以访问，那么可以改成 global.age = 18，但这样子会污染全局作用域，会导致意想不到的惊喜（吓）。
+上面这个文件有两个变量，一个函数，通过 module.exports 暴露变量 name 和函数 fun ,age 这个变量就是私有的，外部无法直接访问，如果想让 age 变量全局都可以访问，那么可以改成 `global.age = 18` ，但这样子会污染全局作用域，会导致意想不到的惊喜（吓）。
 
 我们看看 util\index.js 打印出来的 module
 ![commonjs](./image/modules/commonjs.png)
@@ -41,12 +41,12 @@ var { name, fun } = require('./util/index.js')
 module 中有这些属性
 
 > module.id 模块的识别符，通常是带有绝对路径的模块文件名。
->module.filename 模块的文件名，带有绝对路径。
->module.loaded 返回一个布尔值，表示模块是否已经完成加载。
->module.parent 返回一个module对象，表示调用该模块的模块，如果改该模块没有被引用，那么 parent 就是 null
->module.children 返回一个module数组，表示该模块要用到的其他模块。
->module.exports 表示模块对外输出的值。
->module.paths 这个用于 require 查找该文件的位置
+> module.filename 模块的文件名，带有绝对路径。
+> module.loaded 返回一个布尔值，表示模块是否已经完成加载。
+> module.parent 返回一个module对象，表示调用该模块的模块，如果改该模块没有被引用，那么 parent 就是 null
+> module.children 返回一个module数组，表示该模块要用到的其他模块。
+> module.exports 表示模块对外输出的值。
+> module.paths 这个用于 require 查找该文件的位置。
 
 在开发中我们常使用的就是 module.exports ， 通过 module.exports 输出的对象就是引用方 require 出来的值
 
@@ -95,7 +95,8 @@ exports.name = 'now';
 单独使用 exports 和 module.exports 其实没啥区别，个人建议还是使用 module.exports ，毕竟这才是常规稳妥的写法。
 
 #### 隔离性
-模块化导出的对象与原本模块中的对象是隔离的，简单的说就是克隆了一份。看下面这个栗子
+commonjs 规范是在运行时加载的，在运行时导出对象，导出的对象与原本模块中的对象是隔离的，简单的说就是克隆了一份。看下面这个栗子
+
 ```javascript
 // util\index.js
 let object = {
@@ -127,7 +128,7 @@ end fun { age: 10 }
 引用方调用了导出的 fun 方法，fun 方法改变了模块中的 object 对象，可是在 index.js 中导出的 object 对象并没有发生改变，所以可见 commonjs 规范下模块的导出是深克隆的。
 
 #### 在浏览器中使用 commonjs 规范 browserify
-因为浏览器中缺少 module exports require global 这个四个变量，所以在浏览器中没法直接使用 commonjs 规范，非要使用就需要做个转换，使用 browserify ，它是常用的 commonjs 转换工具，可以搭配 gulp webpack 一起使用。看下经过 browserify 处理后的代码，就截取了些关键部分
+因为浏览器中缺少 `module exports require global` 这个四个变量，所以在浏览器中没法直接使用 commonjs 规范，非要使用就需要做个转换，使用 browserify ，它是常用的 commonjs 转换工具，可以搭配 gulp webpack 一起使用。看下经过 browserify 处理后的代码，就截取了些关键部分
 
 ![broswervify](./image/modules/broswervify.png)
 ![browserify1](./image/modules/browserify1.png)
