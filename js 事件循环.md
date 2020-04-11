@@ -139,6 +139,75 @@ console.log(9)
 注意：
 由于在执行microtask任务的时候，只有当microtask队列为空的时候，它才会进入下一个事件循环，因此，如果它源源不断地产生新的microtask任务，就会导致主线程一直在执行microtask任务，而没有办法执行macrotask任务，这样我们就无法进行UI渲染/IO操作/ajax请求了，因此，我们应该避免这种情况发生。在nodejs里的process.nexttick里，就可以设置最大的调用次数，以此来防止阻塞主线程。
 
+### async/await 又是如何处理的呢 ？
+大家看看这段代码在浏览器上的输出是什么？
+```javascript
+async function async1() {
+    console.log('async1 start');
+    await async2();
+    console.log('async1 end');
+}
+async function async2() {
+    console.log('async2');
+}
+async1();
+new Promise(function(resolve) {
+    console.log('promise1');
+    resolve();
+}).then(function() {
+    console.log('promise2');
+});
+console.log('script end');
+```
+
+这段代码多了 `async/await` 只要我们弄懂这个异步处理的原理，就可以知道它们的执行顺序了。
+
+`async/await`： 这哥俩个其实是 Promise 和 Generator 的语法糖，所以我们把它们转成我们熟悉的 Promise
+```javascript
+async function async1() {
+    console.log('async1 start');
+    await async2();
+    console.log('async1 end');
+}
+// 其实就是
+async function async1() {
+    console.log('async1 start');
+    Promise.resolve(async2()).then(()=>console.log('async1 end'))
+}
+```
+
+那我们在看看转换后的整体代码
+
+```javascript
+async function async1() {
+    console.log('async1 start');
+    Promise.resolve(async2()).then(()=>console.log('async1 end'))
+}
+async function async2() {
+    console.log('async2');
+}
+async1();
+new Promise(function(resolve) {
+    console.log('promise1');
+    resolve();
+}).then(function() {
+    console.log('promise2');
+});
+console.log('script end');
+```
+这下就很明白了吧，输出的结果如下
+
+```javascript
+/** 
+ * async1 start
+ * async2
+ * promise1
+ * script end
+ * async1 end
+ * promise2
+ * */
+```
+
 ### 定时器问题
 
 以此，我们来引入一个新的问题，定时器的问题。定时器是否是真实可靠的呢？比如我执行一个命令:setTimeout(task, 100),他是否就能准确的在100毫秒后执行呢？其实根据以上的讨论，我们就可以得知，这是不可能的。

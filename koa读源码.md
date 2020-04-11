@@ -85,22 +85,34 @@ use(fn) {
 使用组合 (compose) 将 middleware 数组中存储的中间件函数串联起来，核心实现如下
 
 ```javascript
-return function(context, next) {
-  // last called middleware #
-  let index = -1
-  return dispatch(0)
-  function dispatch(i) {
-    if (i <= index) return Promise.reject(new Error('next() called multiple times'))
-    index = i
-    let fn = middleware[i]
-    if (i === middleware.length) fn = next
-    if (!fn) return Promise.resolve()
-    try {
-      return Promise.resolve(fn(context, dispatch.bind(null, i + 1))); // dispatch.bind(null, i + 1) 将下一个中间件方法赋值给 next 
-    } catch (err) {
-      return Promise.reject(err)
+function compose(middleware) {
+    // middleware 函数数组
+    if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!')
+    for (const fn of middleware) {
+        if (typeof fn !== 'function') throw new TypeError('Middleware must be composed of functions!')
     }
-  }
+    /*
+      content:上下文  
+      next:新增一个中间件方法，位于所有中间件末尾，用于内部扩展
+    */
+    return function (context, next) {
+        // last called middleware #
+        let index = -1 // 计数器，用于判断中间是否执行到最后一个
+        return dispatch(0) // 开始执行第一个中间件方法
+        function dispatch(i) {
+            if (i <= index) return Promise.reject(new Error('next() called multiple times'))
+            index = i
+            let fn = middleware[i] // 获取中间件函数
+            if (i === middleware.length) fn = next // 如果中间件已经到了最后一个，执行内部扩展的中间件
+            if (!fn) return Promise.resolve()  // 执行完毕，返回 Promise
+            try {
+                // 执行 fn ，将下一个中间件函数赋值给 next 参数
+                return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
+            } catch (err) {
+                return Promise.reject(err)
+            }
+        }
+    }
 }
 ```
 
